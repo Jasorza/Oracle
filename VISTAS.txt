@@ -1,0 +1,25 @@
+CREATE VIEW vw_Administrador
+AS
+SELECT IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Email, Contrasena, Estado
+FROM Usuario
+WHERE tipo= 1
+
+CREATE VIEW vw_Usuario
+AS
+SELECT IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Direccion, Email, Contrasena
+FROM Usuario
+WHERE tipo= 0
+
+
+CREATE VIEW vw_ValorModelo
+AS
+SELECT IDMODELO, NOMBRE, DIMENSIONES, DISPONIBLE, COSTOSKIN
+FROM MODELO
+WHERE COSTOSKIN= 19000
+
+CREATE VIEW vw_CiudadesValle
+AS
+SELECT IdCiudad, IdDepartamento, Nombre
+FROM Ciudad
+WHERE IdDepartamento=4
+

@@ -1,0 +1,687 @@
+create table Categoria (
+   IdCategoria              number              not null,
+   Nombre		        varchar2(20)        not null,
+   constraint PK_CATEGORIA primary key (IdCategoria)
+);
+
+create table Ciudad (
+   IdCiudad             number              not null,
+   IdDepartamento       number              not null,
+   Nombre               VARCHAR2(30)            not null,
+   constraint PK_CIUDAD primary key (IdCiudad)
+);
+
+create table Departamento (
+   IdDepartamento       number               not null,
+   Nombre               VARCHAR2(30)             not null,
+   constraint PK_DEPARTAMENTO primary key (IdDepartamento)
+);
+
+create table Envio (
+   IdEnvio              number              not null,
+   IdFactura            number              not null,
+   constraint PK_ENVIO primary key (IdEnvio)
+);
+
+create table Factura (
+   IdFactura            number              not null,
+   IdUser               number              not null,
+   IdSkin               number              not null,
+   Fecha                date                not null,
+   constraint PK_FACTURA primary key (IdFactura)
+);
+
+create table FacturaInsumos (
+   IdFacturaInsumos     number              not null,
+   IdMaterial           number              not null,
+   IdProveedor          number              not null,
+   Cantidad             number              not null,
+   Costo                number(8,2)         not null,
+   constraint PK_FACTURAINSUMOS primary key (IdFacturaInsumos)
+);
+
+create table ImagenUser (
+   IdImagenUser         number              not null,
+   URLImagen            number(1)            not null,
+   constraint PK_IMAGENUSER primary key (IdImagenUser)
+);
+
+create table Marca (
+   IdMarca              number              not null,
+   IdModelo             number              not null,
+   Nombre               varchar2(30)        not null,
+   constraint PK_MARCA primary key (IdMarca)
+);
+
+create table Material (
+   IdMaterial           number              not null,
+   Nombre		varchar2(20)		not null,
+   Descripcion          varchar2(50)            not null,
+   constraint PK_MATERIAL primary key (IdMaterial)
+);
+
+create table Modelo (
+   IdModelo             number               not null,
+   Modelo		varchar2(30)	     not null,
+   Dimensiones          varchar2(30)             not null,
+   Disponible           number(1)            not null,
+   CostoSkin            number(8,2)          not null,
+   Imagen               number(1)            not null,
+   constraint PK_MODELO primary key (IdModelo)
+);
+
+create table Proveedor (
+   IdProveedor          number               not null,
+   NIT                  varchar2(15)             not null,
+   Direccion            varchar2(30)             not null,
+   Correo               varchar2(30)             not null,
+   Telefono             varchar2(30)             not null,
+   constraint PK_PROVEEDOR primary key (IdProveedor)
+);
+
+create table Skin (
+   IdSkin               number              not null,
+   IdCategoria          number              not null,
+   IdImagenUuser        number              not null,
+   IdUser               number              not null,
+   Existencia           number(1)           not null,
+   Imagen               number(1)                not null,
+   constraint PK_SKIN primary key (IDSKIN)
+);
+
+create table SolicitudSkin (
+   IdSolicitud          number              not null,
+   IdMarca              number              not null,
+   IdTipo               number              not null,
+   IdUser               number              not null,
+   USE_IDUSER           number              not null,
+   IdSkin               number              not null,
+   CostoSkin            number(8,2)         not null,
+   constraint PK_SOLICITUDSKIN primary key (IdSolicitud)
+);
+
+create table Tipo (
+   IdTipo               number              not null,
+   Nombre               varchar2(30)          not null,
+   constraint PK_TIPO primary key (IdTipo)
+);
+
+create table Usuario (
+   IdUser               number              not null,
+   IdCiudad             number              not null,
+   Tipo                 varchar(1)           not null,
+   Nombres              varchar2(30)            not null,
+   Apellidos            varchar2(30)            not null,
+   Documento            varchar2(30)            not null,
+   Telefono             varchar2(30)            not null,
+   Direccion            varchar2(50)            not null,
+   Email                varchar2(50)            not null,
+   Contrasena           varchar2(30)            not null,
+   Fecha                date                null,
+   Estado               number(1)           null,
+   constraint PK_USER primary key (IdUser)
+);
+
+
+
+
+
+
+
+
+Alter Table Ciudad
+Add Constraint FK_CIUDAD_R12_DEPARTAM 
+Foreign Key (IdDepartamento)
+References Departamento (IdDepartamento);
+
+Alter Table Usuario
+Add Constraint FK_Ciudad_Usuario
+Foreign Key (IdCiudad)
+References Ciudad (IdCiudad);
+
+Alter Table FacturaInsumos
+Add Constraint FK_FacturaInsumos_Material
+Foreign Key (IdMaterial)
+References Material(IdMAterial);
+
+Alter Table FacturaInsumos
+Add Constraint FK_FacturaInsumos_Proveedor
+Foreign Key (IdProveedor)
+References Proveedor (IdProveedor);
+
+Alter Table Factura
+Add Constraint FK_Factura_Usuario
+Foreign Key (IdUser)
+References Usuario (IdUser);
+
+Alter Table Factura
+Add Constraint FK_Factura_Skin
+Foreign Key (IdSkin)
+References Skin (IdSkin);
+
+Alter Table Envio
+Add Constraint FK_Envio_Factura
+Foreign Key (IdFactura)
+References Factura (IdFactura);
+
+Alter Table Skin
+Add Constraint FK_Skin_Usuario
+Foreign Key (IdUser)
+References Usuario (IdUser);
+
+Alter Table Skin
+Add Constraint FK_Skin_ImagenUser
+Foreign Key (IDIMAGENUUSER)
+References ImagenUser (IDIMAGENUSER);
+
+Alter Table Skin
+Add Constraint FK_Skin_Categoria
+Foreign Key (IdCategoria)
+References Categoria (IdCategoria);
+
+ALter Table Marca
+Add Constraint FK_Marca_Modelo
+Foreign Key (IdModelo)
+References Modelo (IdModelo);
+
+ALter Table SolicitudSkin
+Add Constraint FK_Solicitud_Marca
+Foreign Key (IdMarca)
+References Marca (IdMarca);
+
+ALter Table SolicitudSkin
+Add Constraint FK_Solicitud_Tipo
+Foreign Key (IdTipo)
+References Tipo (IdTipo);
+
+ALter Table SolicitudSkin
+Add Constraint FK_Solicitud_Skin
+Foreign Key (IdSkin)
+References Skin (IdSkin);
+
+ALter Table SolicitudSkin
+Add Constraint FK_Solicitud_UsuarioU
+Foreign Key (USE_IDUSER)
+References Usuario (IdUser);
+
+ALter Table SolicitudSkin
+Add Constraint FK_Solicitud_UsuarioA
+Foreign Key (IdUser)
+References Usuario (IdUser);
+
+
+
+
+Insert Into Categoria(IdCategoria, Nombre)
+Values(1,'Deports');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Categoria(IdCategoria, Nombre)
+Values(2,'Games');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Categoria(IdCategoria, Nombre)
+Values(3,'Music');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Categoria(IdCategoria, Nombre)
+Values(4,'Flowers');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Categoria(IdCategoria, Nombre)
+Values(5,'Gothic');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Categoria(IdCategoria, Nombre)
+Values(6,'Kawai');
+
+
+
+Insert Into Departamento(IdDepartamento, Nombre)
+Values(1,'Santander');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Departamento(IdDepartamento, Nombre)
+Values(2,'Sucre');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Departamento(IdDepartamento, Nombre)
+Values(3,'Tolima');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Departamento(IdDepartamento, Nombre)
+Values(4,'Valle del Cauca');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Departamento(IdDepartamento, Nombre)
+Values(5,'Vaupés');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Departamento(IdDepartamento, Nombre)
+Values(6,'Vichada');
+
+
+
+Insert Into Material(IdMaterial, Nombre, Descripcion)
+Values(7,'Cuchilla Diamante T1','Cuchilla de corte para materiales de 93gr');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Material(IdMaterial, Nombre, Descripcion)
+Values(2,'Cuchilla Diamante T2','Cuchilla de corte para materiales de 120gr');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Material(IdMaterial, Nombre, Descripcion)
+Values(3,'Cuchilla Diamante T3','Cuchilla de corte para materiales de 150gr');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Material(IdMaterial, Nombre, Descripcion)
+Values(4,'Cuchilla Diamante T4','Cuchilla de corte para materiales de 200gr');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Material(IdMaterial, Nombre, Descripcion)
+Values(5,'Cuchilla Diamante T5','Cuchilla de corte para materiales de 250gr');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Material(IdMaterial, Nombre, Descripcion)
+Values(6,'Cuchilla Diamante T6','Cuchilla de corte para materiales de 300gr');
+
+
+Insert Into Proveedor(IdProveedor, NIT, Direccion, Correo, Telefono)
+Values(1,'371697-3','Cra 21 No. 16-66 Bogota','user@mail.com','7434449');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Proveedor(IdProveedor, NIT, Direccion, Correo, Telefono)
+Values(2,'1069724413-8','Cra 15 No. 34-56 Norte Bogota','user@mail.com','8675675');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Proveedor(IdProveedor, NIT, Direccion, Correo, Telefono)
+Values(3,'9272926-1','Calle 15C No. 24-56 Bogota','user@mail.com','87657656');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Proveedor(IdProveedor, NIT, Direccion, Correo, Telefono)
+Values(5,'7652826-9','Calle 66A No. 45-180 Bogota','user@mail.com','87632543');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Proveedor(IdProveedor, NIT, Direccion, Correo, Telefono)
+Values(6,'826282619-8','Cra 10B No. 13-45 Bogota','user@mail.com','9013939');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Proveedor(IdProveedor, NIT, Direccion, Correo, Telefono)
+Values(7,'1242725629-9','Cra 9 No. 56-74 Bogota','user@mail.com','9765964');
+
+
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(1, 'Xperia L3', '150x45x23', 1, 15000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(2, 'Xperia 10 Plus', '150x45x23', 0, 25000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(3, 'Xperia 10', '150x45x23', 1, 18000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(4, 'Xperia 1', '150x45x23', 1, 15000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(5, 'Sony Xperia XA2 Plus', '150x45x23', 1, 28000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(6, 'Xperia XZ2', '150x45x23', 1, 15000);
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(7, 'iPhone 4/4s', '150x45x23', 1, 15000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(8, 'iPhone 5', '150x45x23', 1, 19000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(9, 'iPhone 5c', '150x45x23', 0, 19000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(10, 'iPhone 6', '150x45x23', 1, 20000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(11, 'iPhone 6 Plus', '150x45x23', 0, 25000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(12, 'iPhone 7', '150x45x23', 1, 19000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(13, 'Galaxy J6 Plus.', '150x45x23', 1, 14000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(14, 'Galaxy J4 Plus.', '150x45x23', 0, 19000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(15, 'Samsung Galaxy A7 (2018)', '150x45x23', 1, 20000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(16, 'Samsung Galaxy J4 Core.','150x45x23', 1, 20000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(17, 'Samsung Galaxy A8s.','150x45x23', 1, 35000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+insert into MODELO(IDMODELO, MODELO, DIMENSIONES, DISPONIBLE, COSTOSKIN)
+values(18, 'Galaxy A30', '150x45x23', 0, 35000);
+
+
+Insert Into Tipo(IdTipo, Nombre)
+Values(1,'Casemod');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Tipo(IdTipo, Nombre)
+Values(2,'Mouses');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Tipo(IdTipo, Nombre)
+Values(3,'Keyboards');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Tipo(IdTipo, Nombre)
+Values(5,'Powerbank');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Tipo(IdTipo, Nombre)
+Values(6,'Books');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Tipo(IdTipo, Nombre)
+Values(7,'PadMouse');
+
+
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(34,4,'Buenaventura');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(35,6,'Puerto Carreño');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(36,5,'Papunaua');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(37,3,'Ibagué');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(38,2,'Sincelejo');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(39,1,'San Gil');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(40,4,'Cali');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(41,5,'Yavaraté');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(42,6,'la Primavera');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(43,4,'Ginebra');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(44,4,'Palmira');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(45,2,'Corozal');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(46,1,'Barbosa');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(47,5,'Mitú');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Ciudad(IdCiudad, IdDepartamento, Nombre)
+Values(48,3,'Espinal');
+
+
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Email, Contrasena, Estado)
+Values(1,37,'A','Michael S.','Dunn', '8672624314', '573-258-1390', 'MichaelSDunn@superrito.com','********', 1);
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono,  Email, Contrasena, Fecha, Estado)
+Values(2,39,'A','Sheri V.','Hughes','8160501390','313-283-4008','SheriVHughes@superrito.com','********','', 1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono,  Email, Contrasena, Fecha, Estado)
+Values(3,34,'A','Mark G.','Hernandez','4100374871','336-680-1257', 'MarkGHernandez@superrito.com','*******','',0);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Email, Contrasena, Fecha, Estado)
+Values(4,45,'A','Marie C.','Viviano','7876394787','740-258-1391', 'MarieCViviano@gustr.com','********','', '1');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono,  Email, Contrasena, Fecha, Estado)
+Values(5,41,'A','Brenda J.','Julian','95 7872 6530','336-524-0059', 'BrendaJJulian@gustr.com','********','','0');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono,  Email, Contrasena, Fecha, Estado)
+Values(6,39,'A','Jose M.','Cartwright','5971104841','252-527-4639', 'JoseMCartwright@superrito.com','*******','', '0');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Direccion, Email, Contrasena)
+Values (7,37,'C','Aquiles','Brinco','1086645876', '3242312322', 'Carrera 3 # 56-35 Fusagasuga',  'Lola@mail.com', '************');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Direccion, Email, Contrasena)
+Values(8,38,'C',' Shelsea Juliana','Olarte Oidor', '187162862826', '3204567118','Caracas #17a-83 Sur 11001 Bogotá','sjuliolarteo@gmail.com','**********');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Direccion, Email, Contrasena)
+Values(9,47,'C', 'Jose Anthony','Rodriguez Cuesta','11982625272', '3123590765','Avda. Caracas #17a-83 Sur 11001 Bogotá','josrex1988@hotmail.com','**********');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Direccion, Email, Contrasena)
+Values(10,44, 'C', 'Adrian Stuars','Castaño Bernal','19171892612','3222434518','Cl 81 13-05 Bogotá, 11001, Bogotá','adrianstuar0229@gmail.com','*********');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Direccion, Email, Contrasena)
+Values(11,43, 'C', 'Yeison Fabian','Calderon Fernandez','1017816286', '3224011945','Carrera 11 82-71. Bogotá, 11001, Bogotá','yeisonf19@gmail.com','*********');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert into Usuario (IdUser, IdCiudad, Tipo, Nombres, Apellidos, Documento, Telefono, Direccion, Email, Contrasena)
+Values(12,42, 'C', 'Johann Sebastian','Sierra Pineda','10917619181','3212356312','Carrera 11 # 82-71, 11001, Bogotá','sebasipi501@gmail.com','*********');
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(1,2,5,5,90000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(2,3,3,5,100000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(3,4,3,5,100000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(4,5,2,5,120000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(5,6,1,5,130000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(6,2,1,5,150000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(7,2,2,5,180000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(8,3,3,3,90000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(9,4,7,15,150000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into FacturaInsumos(IdFacturaInsumos, IDMATERIAL, IDPROVEEDOR, Cantidad, Costo)
+Values(10,5,5,1,90000);
+
+
+
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(1,1,'Sony');
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(2,2,'Sony');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(3,3,'Sony');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(4,4,'Sony');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(5,5,'Sony');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(6,6,'Sony');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(7,7,'Apple');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(8,8,'Apple');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(9,9,'Apple');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(10,10,'Apple');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(11,11,'Apple');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(12,12,'Apple');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(13,13,'Samsung');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(14,14,'Samsung');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(15,15,'Samsung');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Marca(IDMARCA, IDMODELO, NOMBRE)
+values(16,14,'Samsung');
+
+
+
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(1,1,1);
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(2,1,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(3,2,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(4,2,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(5,3,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(6,3,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(7,4,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(8,4,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(9,5,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(10,5,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(11,6,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Skin(IDSKIN, IDCATEGORIA, EXISTENCIA)
+Values(12,6,1);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(1,1,1,1,7,1,15000);
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(2,2,2,2,8,2,18000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(3,3,3,3,9,3,17800);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(4,4,5,5,10,4,25000);
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(5,5,5,5,11,5,18000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(6,6,6,12,11,6,35000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(7,7,7,1,10,7,15000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(8,8,7,2,9,8,18000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(9,9,6,3,8,9,18000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(10,10,5,5,7,10,12000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(11,11,5,5,7,11,25000);
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(12,12,3,12,9,12,15000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(13,13,2,8,9,12,25000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(14,14,1,7,10,12,25000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into SolicitudSkin (IdSolicitud, IdMarca, IdTipo, IdUser, USE_IDUSER, IdSkin, CostoSkin)
+Values(15,15,1,3,11,12,35000);
+
+
+
+
+
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(1,1,6,'01-09-2018');
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(2,2,7,'01-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(3,3,8,'01-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(4,4,9,'01-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(5,5,10,'03-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(6,6,11,'03-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(7,7,6,'03-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(8,8,6,'05-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(9,9,8,'05-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(10,10,7,'05-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(11,11,9,'06-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(12,12,11,'06-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(13,1,11,'07-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(14,2,10,'07-09-2018');
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into Factura(IdFactura, IdSkin, IdUser, Fecha)
+Values(15,3,9,'07-09-2018');
+
+
+
+Insert Into ENVIO(IDENVIO, IDFACTURA)
+Values(1,1);
+Insert Into ENVIO(IDENVIO, IDFACTURA)
+Values(2,2);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into ENVIO(IDENVIO, IDFACTURA)
+Values(3,3);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into ENVIO(IDENVIO, IDFACTURA)
+Values(4,4);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into ENVIO(IDENVIO, IDFACTURA)
+Values(5,5);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into ENVIO(IDENVIO, IDFACTURA)
+Values(6,6);
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Insert Into ENVIO(IDENVIO, IDFACTURA)
+Values(7,7);
+
+

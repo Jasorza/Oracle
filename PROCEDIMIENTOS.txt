@@ -1,0 +1,52 @@
+--PROCEDIMIENTO 1--
+
+create or replace procedure pa_aumentar(acantidad in number)
+ as
+ begin
+  update facturainsumos set costo=costo+(costo*0.1)
+  where cantidad=acantidad;
+ end;
+ 
+ execute pa_aumentar(5);
+
+
+--PROCEDIMIENTO 2--
+
+create or replace procedure pa_insertar(idproveedor in number, nit in varchar2, direccion in varchar2, correo varchar2, telefono varchar2)
+as
+begin
+insert into proveedor values (idproveedor, nit, direccion, correo, telefono);
+end;
+
+execute pa_insertar(4, '68767', 'cll2 cr4 Tunja', 'user@gmail.com', '3114527652');
+
+
+--PROCEDIMIENTO 3--
+
+CREATE OR REPLACE  PROCEDURE pr_listar
+IS
+CURSOR C1 IS SELECT iduser, nombres, apellidos FROM usuario;
+BEGIN
+DBMS_OUTPUT.PUT_LINE ('CODIGO    NOMBRE    APELLIDOS');
+DBMS_OUTPUT.PUT_LINE ('----------------------------');
+FOR LISTA IN C1 LOOP
+DBMS_OUTPUT.PUT_LINE (LISTA.IDUSER || ' ' || LISTA.NOMBRES || ' ' || LISTA.APELLIDOS);
+END LOOP;
+END pr_listar;
+ 
+SET SERVEROUTPUT ON;
+BEGIN
+pr_listar();
+END;
+
+
+
+--PROCEDIMIENTO 4--
+
+create or replace procedure pa_insertar_depar(iddepartamento in number, nombre in varchar2)
+as
+begin
+insert into departamento values (iddepartamento, nombre);
+end;
+
+EXECUTE pa_insertar_depar(7, 'Boyacá');

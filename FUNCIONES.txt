@@ -1,0 +1,60 @@
+--FUNCION 1--
+
+create or replace function f_valor (avalor number)
+  return varchar2
+ is
+  valorretornado varchar2(20);
+ begin
+   valorretornado:='';
+   if avalor<=20000 then
+    valorretornado:='economico';
+   else valorretornado:='costoso';
+   end if;
+   return valorretornado;
+ end;
+ 
+select modelo,f_valor(costoskin) from modelo;
+
+
+--FUNCION 2--
+
+create or replace function f_incremento10 (avalor number)
+  return number
+ is
+ begin 
+   return avalor+(avalor*0.1);
+ end;
+ 
+ select idfacturainsumos,idmaterial,idproveedor,cantidad,f_incremento10(costo) from facturainsumos;
+
+
+
+--FUNCION 3--
+
+ create or replace function f_incremento (avalor number, aincremento number)
+  return number
+ is
+  begin 
+   return avalor+(avalor*aincremento/100);
+  end;
+  
+  select Iduser,Idskin,f_incremento(costoskin,20) from solicitudskin;
+  
+  
+--FUNCION 4--
+
+create or replace function f_existencia (existencia number)
+  return varchar
+ is
+  cantidadretornada varchar2(20);
+ begin
+   cantidadretornada:='';
+   if existencia=0 then
+    cantidadretornada:='Agotado';
+   else cantidadretornada:='Disponible';
+   end if;
+   return cantidadretornada;
+ end;
+ 
+select idskin,idcategoria,iduser,f_existencia(existencia) from skin;
+  
